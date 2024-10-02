@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from .models import Meeting
+from .models import Event
 
 # Create your views here.
 
 
-def create_meeting(request):
+def create_event(request):
     pass
 
 
