@@ -13,7 +13,7 @@ class Event(models.Model):
     location = models.CharField(max_length=255, blank=True)
 
 
-# This is an entry for a the availability of a User, associated with an Event
+# This is an entry for the availability of a User, associated with an Event
 class Availability(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     participant_id = models.IntegerField()
