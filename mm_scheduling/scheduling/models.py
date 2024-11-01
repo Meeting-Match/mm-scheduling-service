@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -18,5 +19,12 @@ class Availability(models.Model):
     participant_id = models.IntegerField()
     start = models.DateTimeField()
     end = models.DateTimeField()
-# We need to set up some sort of integrity check here to make sure start is
-# before end.
+
+    def clean(self):
+        super().clean()
+        if self.start >= self.end:
+            raise ValidationError('Start time must be before end time.')
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
