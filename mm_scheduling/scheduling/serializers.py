@@ -7,3 +7,11 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
         model = Event
         fields = ['url', 'title', 'organizer_id', 'participant_ids',
                   'datetime', 'description', 'location']
+
+
+class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
+    event = EventSerializer()
+
+    class Meta:
+        model = Availability
+        fields = ['participant_id', 'start', 'end', 'event']
