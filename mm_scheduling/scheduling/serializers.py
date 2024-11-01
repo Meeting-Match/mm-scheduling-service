@@ -10,7 +10,9 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
-    event = EventSerializer()
+    event = serializers.HyperlinkedRelatedField(
+        view_name='event'
+    )
 
     class Meta:
         model = Availability
