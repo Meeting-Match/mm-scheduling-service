@@ -1,12 +1,21 @@
 from django.shortcuts import render
-from .models import Meeting
+from .models import Event, Availability
+from .serializers import EventSerializer, AvailabilitySerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 # Create your views here.
 
 
-def create_meeting(request):
-    pass
+@api_view(['GET'])
+def get_event(request, event_id):
+    event = Event.objects.get(pk=event_id)
+    serializer = EventSerializer(event)
+    return Response(serializer.data)
 
 
-def invite_participants(request):
-    pass
+@api_view(['GET'])
+def get_availability(request, avail_id):
+    avail = Availability.objects.get(pk=avail_id)
+    serializer = AvailabilitySerializer(avail)
+    return Response(serializer.data)
