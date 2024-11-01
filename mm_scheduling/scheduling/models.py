@@ -15,7 +15,8 @@ class Event(models.Model):
 
 # This is an entry for the availability of a User, associated with an Event
 class Availability(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="availabilities")
     participant_id = models.IntegerField()
     start = models.DateTimeField()
     end = models.DateTimeField()
