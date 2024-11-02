@@ -3,7 +3,10 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    path('event/<int:event_id>', views.get_event, name="read_event"),
-    path('event', views.create_event, name="create_event"),
-    path('availability/<int:avail_id>', views.get_availability, name="event")
+    path('events/', views.EventList.as_view(), name="event-list"),
+    path('events/<int:pk>/', views.EventDetail.as_view(), name="event-detail"),
+    path('availability/', views.AvailabilityList.as_view(),
+         name="availability-list"),
+    path('availability/<int:pk>/', views.AvailabilityDetail.as_view(),
+         name="availability-detail"),
 ]
