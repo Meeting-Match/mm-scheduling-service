@@ -1,34 +1,35 @@
-from django.shortcuts import render
 from .models import Event, Availability
 from .serializers import EventSerializer, AvailabilitySerializer
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework import generics
 
 # Create your views here.
 
 
-# Event_id needs to be taken from the json data
-@api_view(['GET'])
-def get_event(request, event_id):
-    event = Event.objects.get(pk=event_id)
-    serializer = EventSerializer(event)
-    return Response(serializer.data)
+# This uses ListCreateAPIView to list all instances of the object
+# and to let us POST new ones
+class EventList(generics.ListCreateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
 
 
-@api_view(['POST'])
-def create_event(request):
-    serializer = EventSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data(status=201))
-    else:
-        return Response({"error": "Invalid data"},
-                        status=status.HTTP_400_BAD_REQUEST)
+# This uses RetrieveUpdateDestroyAPIView to give us full CRUD on
+# the object. Well, minus the Create, which is covered by the above
+# class
+class EventDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
 
 
-@api_view(['GET'])
-def get_availability(request, avail_id):
-    avail = Availability.objects.get(pk=avail_id)
-    serializer = AvailabilitySerializer(avail)
-    return Response(serializer.data)
+# This uses ListCreateAPIView to list all instances of the object
+# and to let us POST new ones
+class AvailabilityList(generics.ListCreateAPIView):
+    queryset = Availability.objects.all()
+    serializer_class = AvailabilitySerializer
+
+
+# This uses RetrieveUpdateDestroyAPIView to give us full CRUD on
+# the object. Well, minus the Create, which is covered by the above
+# class
+class AvailabilityDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Availability.objects.all()
+    serializer_class = AvailabilitySerializer
