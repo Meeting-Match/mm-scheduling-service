@@ -1,4 +1,4 @@
-from models import Event, Availability
+from .models import Event, Availability
 from rest_framework import serializers
 
 
@@ -11,7 +11,8 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
 
 class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
     event = serializers.HyperlinkedRelatedField(
-        view_name='event'
+        view_name='event',
+        read_only=True
     )
 
     class Meta:
