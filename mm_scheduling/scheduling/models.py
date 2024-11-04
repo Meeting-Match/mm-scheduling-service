@@ -32,7 +32,6 @@ class Availability(models.Model):
     participant_id = models.IntegerField(blank=False)
     start = models.DateTimeField()
     end = models.DateTimeField()
-
     permission_classes = [IsOwner]
 
     def clean(self):
