@@ -18,4 +18,5 @@ class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Availability
-        fields = ['url', 'id', 'participant_id', 'start', 'end', 'event']
+        fields = ['url', 'id', 'start', 'end', 'event']
+        read_only_fields = ['participant_id']
