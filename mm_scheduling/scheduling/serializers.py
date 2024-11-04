@@ -5,8 +5,9 @@ from rest_framework import serializers
 class EventSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Event
-        fields = ['url', 'id', 'title', 'organizer_id', 'participant_ids',
+        fields = ['url', 'id', 'title', 'participant_ids',
                   'datetime', 'description', 'location']
+        read_only_fields = ['organizer_id']
 
 
 class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
