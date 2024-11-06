@@ -39,8 +39,9 @@ class AvailabilityList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         event = serializer.validated_data['event']
 
+        id = self.request.user.id
         # Check if the request user is a participant of the event
-        if self.request.user.id not in event.participant_ids:
+        if id not in event.participant_ids or id != event.organizer_id:
             raise PermissionDenied("You are not a participant in this event.")
 
         # Save the Availability instance if the check passes
