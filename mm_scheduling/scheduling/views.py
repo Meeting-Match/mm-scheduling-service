@@ -66,5 +66,5 @@ class EventAvailabilityList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        event_id = self.kwargs['event_id']
+        event_id = self.kwargs['pk']
         return Availability.objects.filter(event_id=event_id)
