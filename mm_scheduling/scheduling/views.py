@@ -58,4 +58,13 @@ class AvailabilityDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsOwner]
 
-# TODO: Make route for viewing all Availabilities associated with an Event.
+
+# Return all Availabilitys associated with an Event.
+class EventAvailabilityList(generics.ListAPIView):
+    serializer_class = AvailabilitySerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        event_id = self.kwargs['event_id']
+        return Availability.objects.filter(event_id=event_id)
