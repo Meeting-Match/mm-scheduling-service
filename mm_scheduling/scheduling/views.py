@@ -1,4 +1,4 @@
-from .models import Event, Availability
+from .models import Event, Availability, IsOwner
 from .serializers import EventSerializer, AvailabilitySerializer
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
@@ -13,6 +13,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 class EventList(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    # authentication_classes here causes paths associated with this view
+    # to use JWT auth.
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -20,14 +22,13 @@ class EventList(generics.ListCreateAPIView):
         serializer.save(organizer_id=self.request.user.id)
 
 
-# This uses RetrieveUpdateDestroyAPIView to give us full CRUD on
-# the object. Well, minus the Create, which is covered by the above
-# class
+# This uses RetrieveUpdateDestroyAPIView to give us full Retrieve, Update, and
+# Delete functionality on the object.
 class EventDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwner]
 
 
 # This uses ListCreateAPIView to list all instances of the object
@@ -35,6 +36,7 @@ class EventDetail(generics.RetrieveUpdateDestroyAPIView):
 class AvailabilityList(generics.ListCreateAPIView):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
+    authentication_classes = [JWTAuthentication]
 
     def perform_create(self, serializer):
         event = serializer.validated_data['event']
@@ -48,9 +50,12 @@ class AvailabilityList(generics.ListCreateAPIView):
         serializer.save()
 
 
-# This uses RetrieveUpdateDestroyAPIView to give us full CRUD on
-# the object. Well, minus the Create, which is covered by the above
-# class
+# This uses RetrieveUpdateDestroyAPIView to give us full Retrieve, Update, and
+# Delete functionality on the object.
 class AvailabilityDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsOwner]
+
+# TODO: Make route for viewing all Availabilities associated with an Event.
