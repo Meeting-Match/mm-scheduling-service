@@ -5,6 +5,8 @@ from rest_framework.permissions import BasePermission
 # Create your models here.
 
 
+# This is a permission class which controls who can update or delete a model.
+# It is used by Event and Availability: see 'permission_classes = [IsOwner]'
 class IsOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
         # Check if the user is trying to perform a safe method like GET
@@ -16,7 +18,7 @@ class IsOwner(BasePermission):
 
 class Event(models.Model):
     title = models.CharField(max_length=255)
-    organizer_id = models.IntegerField()  # Single user ID for the organizer
+    organizer_id = models.IntegerField()
     participant_ids = models.JSONField(blank=True, default=list)
     datetime = models.DateTimeField()
     description = models.TextField(blank=True)
@@ -34,6 +36,7 @@ class Availability(models.Model):
     end = models.DateTimeField()
     permission_classes = [IsOwner]
 
+    # When saving an Availability, verify integrity of start and end times.
     def clean(self):
         super().clean()
         if self.start >= self.end:
