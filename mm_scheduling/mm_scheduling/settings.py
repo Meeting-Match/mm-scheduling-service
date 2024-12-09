@@ -151,17 +151,21 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-
     "http://localhost:8000",
-
     "http://localhost:8001",
-
     "http://localhost:3000",
-
     "http://3.15.225.226:8000",
-
     "http://18.119.106.13:8000",
-
     "http://3.144.254.242:8000",
+]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
 ]
