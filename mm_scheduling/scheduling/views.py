@@ -23,6 +23,7 @@ class EventList(generics.ListCreateAPIView):
         return super().get(request, *args, **kwargs)
 
     def perform_create(self, serializer):
+        print(self.request)
         serializer.save(organizer_id=self.request.user.id)
 
 
