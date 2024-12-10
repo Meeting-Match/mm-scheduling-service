@@ -17,8 +17,26 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+import logging
+
+logger = logging.getLogger("scheduling")
+
+def log_project_url(view):
+    """
+    Decorator to log project-level URL requests
+    """
+    def wrapper(request, *args, **kwargs):
+        correlation_id = getattr(request, 'correlation_id', 'N/A')
+        logger.info(f'Project-level URL accessed: {request.path}', extra={'correlation_id': correlation_id})
+        return view(request, *args, **kwargs)
+    return wrapper
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", include("scheduling.urls")),
+    path("admin/", log_project_url(admin.site.urls)),
+    path("", log_project_url(include("scheduling.urls"))),
 ]
+
+# urlpatterns = [
+#     path("admin/", admin.site.urls),
+#     path("", include("scheduling.urls")),
+# ]
