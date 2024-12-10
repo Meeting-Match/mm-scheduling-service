@@ -1,5 +1,6 @@
 from .models import Event, Availability, IsOwner
 from .serializers import EventSerializer, AvailabilitySerializer
+from .util import RemoteJWTAuthentication
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
@@ -13,13 +14,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 class EventList(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-<<<<<<< Updated upstream
-    # authentication_classes here causes paths associated with this view
-    # to use JWT auth.
-    authentication_classes = [JWTAuthentication]
-=======
     authentication_classes = [RemoteJWTAuthentication]
->>>>>>> Stashed changes
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
