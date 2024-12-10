@@ -13,10 +13,19 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 class EventList(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+<<<<<<< Updated upstream
     # authentication_classes here causes paths associated with this view
     # to use JWT auth.
     authentication_classes = [JWTAuthentication]
+=======
+    authentication_classes = [RemoteJWTAuthentication]
+>>>>>>> Stashed changes
     permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        # Debugging headers
+        print(f"-------HEADERS: {request.headers}------------------")
+        return super().get(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(organizer_id=self.request.user.id)
