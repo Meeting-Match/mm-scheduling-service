@@ -41,7 +41,7 @@ class EventDetail(generics.RetrieveUpdateDestroyAPIView):
 class AvailabilityList(generics.ListCreateAPIView):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTStatelessUserAuthentication]
 
     def perform_create(self, serializer):
         event = serializer.validated_data['event']
