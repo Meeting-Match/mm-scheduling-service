@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-# import environ
-import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,31 +78,25 @@ WSGI_APPLICATION = "mm_scheduling.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# env = environ.Env()
-# environ.Env.read_env()
-
-# DATABASES = {
-# "default": {
-# "ENGINE": "django.db.backends.mysql",
-# "NAME": env('DB_NAME'),
-# "USER": env('DB_USER'),
-# "PASSWORD": env('DB_PASSWORD'),
-# "HOST": env('DB_HOST'),
-# "PORT": env('DB_PORT'),
-# "OPTIONS": {
-# "ssl": {
-# "ca": env('DB_CA'),
-# }
-# }
-# }
-# }
+env = environ.Env()
+environ.Env.read_env()
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": env('DB_NAME'),
+        "USER": env('DB_USER'),
+        "PASSWORD": env('DB_PASSWORD'),
+        "HOST": env('DB_HOST'),
+        "PORT": env('DB_PORT'),
+        "OPTIONS": {
+            "ssl": {
+                "ca": env('DB_CA'),
+            }
+        }
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
