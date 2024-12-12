@@ -2,7 +2,9 @@
 import requests
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import AuthenticationFailed
-from django.contrib.auth.models import AnonymousUser
+# from django.contrib.auth.models import AnonymousUser
+# from rest_framework.exceptions import AuthenticationFailed
+# from rest_framework_simplejwt.authentication import JWTAuthentication
 # import jwt
 # from django.conf import settings
 

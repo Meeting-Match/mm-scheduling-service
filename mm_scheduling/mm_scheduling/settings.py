@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import environ
+# import environ
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,8 @@ SECRET_KEY = "django-insecure-yj^^ori(=_no(^-bj*%oc7sl1u-((5=%q($$uwvknrsit=$vy%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['18.119.106.13', '3.15.225.226', '3.144.254.242', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['18.119.106.13', '3.15.225.226',
+                 '3.144.254.242', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -77,25 +79,31 @@ WSGI_APPLICATION = "mm_scheduling.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-env = environ.Env()
-environ.Env.read_env()
+# env = environ.Env()
+# environ.Env.read_env()
+
+# DATABASES = {
+# "default": {
+# "ENGINE": "django.db.backends.mysql",
+# "NAME": env('DB_NAME'),
+# "USER": env('DB_USER'),
+# "PASSWORD": env('DB_PASSWORD'),
+# "HOST": env('DB_HOST'),
+# "PORT": env('DB_PORT'),
+# "OPTIONS": {
+# "ssl": {
+# "ca": env('DB_CA'),
+# }
+# }
+# }
+# }
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": env('DB_NAME'),
-        "USER": env('DB_USER'),
-        "PASSWORD": env('DB_PASSWORD'),
-        "HOST": env('DB_HOST'),
-        "PORT": env('DB_PORT'),
-        "OPTIONS": {
-            "ssl": {
-                "ca": env('DB_CA'),
-            }
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -141,7 +149,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
