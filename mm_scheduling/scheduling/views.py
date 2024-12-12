@@ -51,7 +51,10 @@ class AvailabilityList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
+        print(self.request)
+        print(serializer.validated_data)
         event = serializer.validated_data['event']
+        print(event)
 
         id = self.request.user.id
         # Check if the request user is a participant of the event
@@ -59,7 +62,8 @@ class AvailabilityList(generics.ListCreateAPIView):
             raise PermissionDenied("You are not a participant in this event.")
 
         # Save the Availability instance if the check passes
-        serializer.save()
+        print("About to save...")
+        serializer.save(participant_id=self.request.user.id)
 
 
 # This uses RetrieveUpdateDestroyAPIView to give us full Retrieve, Update, and

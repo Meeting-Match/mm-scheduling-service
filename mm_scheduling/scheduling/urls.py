@@ -7,8 +7,8 @@ urlpatterns = [
     path('events/<int:pk>/', views.EventDetail.as_view(), name="event-detail"),
     path('events/<int:pk>/availability',
          views.EventAvailabilityList.as_view(), name='event-availablity-list'),
-    path('availability/', views.AvailabilityList.as_view(),
+    path('availabilities/', views.AvailabilityList.as_view(),
          name="availability-list"),
-    path('availability/<int:pk>/', views.AvailabilityDetail.as_view(),
+    path('availabilities/<int:pk>/', views.AvailabilityDetail.as_view(),
          name="availability-detail"),
 ]
