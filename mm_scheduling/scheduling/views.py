@@ -1,6 +1,6 @@
 from .models import Event, Availability, IsOwner
 from .serializers import EventSerializer, AvailabilitySerializer
-from .util import RemoteJWTAuthentication
+from .util import RemoteJWTAuthentication, IsOwnerOrReadOnly
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
@@ -32,16 +32,23 @@ class EventList(generics.ListCreateAPIView):
 class EventDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsOwner]
+    authentication_classes = [JWTStatelessUserAuthentication]
+    permission_classes = [IsOwnerOrReadOnly]
 
+    def get(self, request, *args, **kwargs):
+        print(f"request.auth: {request.auth}")
+        print(f"request.user: {request.user}")
+        return super().get(request, *args, **kwargs)
 
 # This uses ListCreateAPIView to list all instances of the object
 # and to let us POST new ones
+
+
 class AvailabilityList(generics.ListCreateAPIView):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
     authentication_classes = [JWTStatelessUserAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         event = serializer.validated_data['event']
@@ -60,8 +67,8 @@ class AvailabilityList(generics.ListCreateAPIView):
 class AvailabilityDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsOwner]
+    authentication_classes = [JWTStatelessUserAuthentication]
+    permission_classes = [IsOwnerOrReadOnly]
 
 
 # Return all Availabilitys associated with an Event.
