@@ -4,7 +4,7 @@ from .util import RemoteJWTAuthentication
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication, JWTStatelessUserAuthentication
 
 # Create your views here.
 
@@ -14,7 +14,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 class EventList(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    authentication_classes = [RemoteJWTAuthentication]
+    authentication_classes = [JWTStatelessUserAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
