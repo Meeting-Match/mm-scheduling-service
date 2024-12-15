@@ -90,11 +90,6 @@ class AvailabilityDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTStatelessUserAuthentication]
     permission_classes = [IsOwnerOrReadOnly]
 
-    def get(self, request, *args, **kwargs):
-        print(f"request.auth: {request.auth}")
-        print(f"request.user: {request.user}")
-        return super().get(request, *args, **kwargs)
-
     def retrieve(self, request, *args, **kwargs):
         correlation_id = get_correlation_id(request)
         logger.info(f'GET request received for AvailabilityDetail with ID {kwargs['pk']} by user {request.user}', extra={'correlation_id': correlation_id})
@@ -126,12 +121,15 @@ class ParticipantEventList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        correlation_id = get_correlation_id(self.request)
         # Get the user ID from the request
         user_id = self.request.user.id
+        logger.info(f'Fetching participant events for user {user_id}', extra={'correlation_id': correlation_id})
         # Get all events and filter in Python
         events = Event.objects.all()
         participant_events = [event for event in events if str(
             user_id) in event.participant_ids]
+        logger.debug(f'Participant events found: {len(participant_events)}', extra={'correlation_id': correlation_id})
         return participant_events
 
 
@@ -141,7 +139,11 @@ class OrganizerEventList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        correlation_id = get_correlation_id(self.request)
         # Get the user ID from the request
         user_id = self.request.user.id
+        logger.info(f'Fetching organizer events for user {user_id}', extra={'correlation_id': correlation_id})
         # Filter events where the user is the organizer
-        return Event.objects.filter(organizer_id=user_id)
+        organizer_events = Event.objects.filter(organizer_id=user_id)
+        logger.debug(f'Organizer events found: {len(organizer_events)}', extra={'correlation_id': correlation_id})
+        return organizer_events

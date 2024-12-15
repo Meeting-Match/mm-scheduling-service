@@ -46,14 +46,17 @@ class IsOwnerOrReadOnly(BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
+        correlation_id = get_correlation_id(request)
+        logger.info(f'Checking object permission for user {request.user.id}', extra={'correlation_id': correlation_id})
         # Read permissions are allowed to any request
         if request.method in ['GET', 'HEAD', 'OPTIONS']:
-            print("Using GET, allowing request")
+            logger.debug('Read-only access allowed', extra={'correlation_id': correlation_id})
             return True
         # Write permissions are only allowed to the owner
-        print(f"obj.organizer_id: {obj.organizer_id}")
-        print(f"request.user.id: {request.user.id}")
-        return obj.organizer_id == request.user.id
+        is_owner = obj.organizer_id == request.user.id
+        if not is_owner:
+            logger.warning(f'Permission denied for user {request.user.id} on object {obj}', extra={'correlation_id': correlation_id})
+        return is_owner
 
 
 class RemoteJWTAuthentication(JWTAuthentication):

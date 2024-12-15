@@ -16,6 +16,9 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
     organizer_profile = serializers.SerializerMethodField()
 
     def get_organizer_profile(self, obj):
+        correlation_id = self.context.get('request', {}).META.get('HTTP_X_CORRELATION_ID', 'N/A')
+        logger.debug(f'Fetching organizer profile URL for Event with ID {obj.id}', extra={'correlation_id': correlation_id})
+
         # Construct the URL using the plain `organizer_id` field
         user_info_url = f'http://localhost:8001/userinfo/{obj.organizer_id}/'
         return user_info_url
@@ -47,6 +50,9 @@ class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
         queryset=Event.objects.all())
 
     def get_participant(self, obj):
+        correlation_id = self.context.get('request', {}).META.get('HTTP_X_CORRELATION_ID', 'N/A')
+        logger.debug(f'Fetching participant profile URL for Availability with ID {obj.id}', extra={'correlation_id': correlation_id})
+
         # Construct the full URL for the other service's endpoint
         user_info_url = f'http://localhost:8001/userinfo/{obj.participant_id}/'
         return user_info_url

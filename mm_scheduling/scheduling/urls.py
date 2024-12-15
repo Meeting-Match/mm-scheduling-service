@@ -1,10 +1,8 @@
 from django.urls import include, path
-<<<<<<< HEAD
-=======
+
 # from graphene_django.views import GraphQLView
 # from django.views.decorators.csrf import csrf_exempt
 
->>>>>>> main
 from . import views
 import logging
 
