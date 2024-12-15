@@ -76,12 +76,18 @@ class AvailabilityDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTStatelessUserAuthentication]
     permission_classes = [IsOwnerOrReadOnly]
 
+    def get(self, request, *args, **kwargs):
+        print(f"request.auth: {request.auth}")
+        print(f"request.user: {request.user}")
+        return super().get(request, *args, **kwargs)
+
 
 # Return all Availabilitys associated with an Event.
 class EventAvailabilityList(generics.ListAPIView):
     serializer_class = AvailabilitySerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTStatelessUserAuthentication]
+    permission_classes = [IsOwnerOrReadOnly]
 
     def get_queryset(self):
         event_id = self.kwargs['pk']
