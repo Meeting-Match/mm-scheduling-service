@@ -2,5 +2,5 @@ venv/
 .env
 Dockerfile
 mm_scheduling/mm_scheduling/us-east-2-bundle.pem
-*.pyc
 __pycache__/
+*.pyc

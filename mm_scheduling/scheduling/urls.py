@@ -1,4 +1,10 @@
 from django.urls import include, path
+<<<<<<< HEAD
+=======
+# from graphene_django.views import GraphQLView
+# from django.views.decorators.csrf import csrf_exempt
+
+>>>>>>> main
 from . import views
 import logging
 
@@ -18,8 +24,10 @@ urlpatterns = [
     path('events/', log_request_with_correlation_id(views.EventList.as_view()), name="event-list"),
     path('events/<int:pk>/', log_request_with_correlation_id(views.EventDetail.as_view()), name="event-detail"),
     path('events/<int:pk>/availability', log_request_with_correlation_id(views.EventAvailabilityList.as_view()), name='event-availability-list'),
-    path('availability/', log_request_with_correlation_id(views.AvailabilityList.as_view()), name="availability-list"),
-    path('availability/<int:pk>/', log_request_with_correlation_id(views.AvailabilityDetail.as_view()), name="availability-detail"),
+    path('availabilities/', log_request_with_correlation_id(views.AvailabilityList.as_view()), name="availability-list"),
+    path('availabilities/<int:pk>/', log_request_with_correlation_id(views.AvailabilityDetail.as_view()), name="availability-detail"),
+    path('events/participant/', log_request_with_correlation_id(views.ParticipantEventList.as_view()), name='participant-event-list'),
+    path('events/organizer/', log_request_with_correlation_id(views.OrganizerEventList.as_view()), name='organizer-event-list'),
 ]
 
 # urlpatterns = [

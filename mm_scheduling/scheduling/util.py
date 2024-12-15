@@ -2,7 +2,10 @@
 import requests
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import AuthenticationFailed
-from django.contrib.auth.models import AnonymousUser
+from rest_framework.permissions import BasePermission
+# from django.contrib.auth.models import AnonymousUser
+# from rest_framework.exceptions import AuthenticationFailed
+# from rest_framework_simplejwt.authentication import JWTAuthentication
 # import jwt
 # from django.conf import settings
 import logging
@@ -34,6 +37,23 @@ class RemoteJWTAuthenticationDeprecated(JWTAuthentication):
         request.user = {"id": user_id, "is_authenticated": True}
         logger.info(f'User authenticated: {user_id}', extra={'correlation_id': correlation_id})
         return (request.user, validated_token)
+
+
+class IsOwnerOrReadOnly(BasePermission):
+    """
+    Custom permission to allow anyone to retrieve an object (GET),
+    but restrict Update and Delete actions to the owner.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request
+        if request.method in ['GET', 'HEAD', 'OPTIONS']:
+            print("Using GET, allowing request")
+            return True
+        # Write permissions are only allowed to the owner
+        print(f"obj.organizer_id: {obj.organizer_id}")
+        print(f"request.user.id: {request.user.id}")
+        return obj.organizer_id == request.user.id
 
 
 class RemoteJWTAuthentication(JWTAuthentication):
