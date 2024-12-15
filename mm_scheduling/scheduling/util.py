@@ -36,6 +36,7 @@ class IsOwnerOrReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
         # Read permissions are allowed to any request
         if request.method in ['GET', 'HEAD', 'OPTIONS']:
+            print("Using GET, allowing request")
             return True
         # Write permissions are only allowed to the owner
         print(f"obj.organizer_id: {obj.organizer_id}")

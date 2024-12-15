@@ -107,3 +107,15 @@ class ParticipantEventList(generics.ListAPIView):
         participant_events = [event for event in events if str(
             user_id) in event.participant_ids]
         return participant_events
+
+
+class OrganizerEventList(generics.ListAPIView):
+    serializer_class = EventSerializer
+    authentication_classes = [JWTStatelessUserAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Get the user ID from the request
+        user_id = self.request.user.id
+        # Filter events where the user is the organizer
+        return Event.objects.filter(organizer_id=user_id)

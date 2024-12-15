@@ -15,4 +15,6 @@ urlpatterns = [
          name="availability-detail"),
     path('events/participant/', views.ParticipantEventList.as_view(),
          name='participant-event-list'),
+    path('events/organizer/', views.OrganizerEventList.as_view(),
+         name='organizer-event-list'),
 ]
