@@ -204,7 +204,12 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
-        'scheduling': {  # Logger for the scheduling app
+        'django.server': {  # Prevent duplicate basehttp logs
+            'handlers': [],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'scheduling': {  # Logger for the authservice app
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
