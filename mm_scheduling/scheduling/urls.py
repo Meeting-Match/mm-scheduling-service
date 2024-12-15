@@ -1,4 +1,6 @@
 from django.urls import include, path
+# from graphene_django.views import GraphQLView
+# from django.views.decorators.csrf import csrf_exempt
 
 from . import views
 
@@ -11,4 +13,6 @@ urlpatterns = [
          name="availability-list"),
     path('availabilities/<int:pk>/', views.AvailabilityDetail.as_view(),
          name="availability-detail"),
+    path('events/participant/', views.ParticipantEventList.as_view(),
+         name='participant-event-list'),
 ]

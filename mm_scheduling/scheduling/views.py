@@ -56,9 +56,11 @@ class AvailabilityList(generics.ListCreateAPIView):
         event = serializer.validated_data['event']
         print(event)
 
-        id = self.request.user.id
+        id = int(self.request.user.id)
         # Check if the request user is a participant of the event
-        if id not in event.participant_ids or id != event.organizer_id:
+        print(f"Request ID: {id}")
+        print(f"IDs in event participants: {event.participant_ids}")
+        if id not in list(map(int, event.participant_ids)) or id != event.organizer_id:
             raise PermissionDenied("You are not a participant in this event.")
 
         # Save the Availability instance if the check passes
@@ -84,3 +86,18 @@ class EventAvailabilityList(generics.ListAPIView):
     def get_queryset(self):
         event_id = self.kwargs['pk']
         return Availability.objects.filter(event_id=event_id)
+
+
+class ParticipantEventList(generics.ListAPIView):
+    serializer_class = EventSerializer
+    authentication_classes = [JWTStatelessUserAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Get the user ID from the request
+        user_id = self.request.user.id
+        # Get all events and filter in Python
+        events = Event.objects.all()
+        participant_events = [event for event in events if str(
+            user_id) in event.participant_ids]
+        return participant_events
